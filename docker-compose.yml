@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
+    container_name: elasticsearch
+    environment:
+      - node.name=es01
+      - network.bind_host=0.0.0.0
+      - network.host=0.0.0.0
+      - cluster.name=es-docker-cluster
+      - discovery.type=single-node
+      - discovery.seed_hosts=localhost
+      - bootstrap.memory_lock=true
+      - http.host=0.0.0.0
+      - http.port=9200
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+      - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
+      - http.cors.allow-credentials=true
+      - http.cors.allow-methods=OPTIONS, HEAD, GET, POST, PUT, DELETE
+      - logger.level=debug
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+   # volumes:
+      # - "./run/elasticsearch/data:/usr/share/elasticsearch/data"
+      # - "./configs/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+    ports:
+      - 9200:9200
+      - 9300:9300
